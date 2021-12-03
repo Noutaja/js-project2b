@@ -5,13 +5,12 @@ const storedList = "storedList";
 //LISTENERS
 $(document).ready(function () {
     loadTodo(); //load from LocalStorage when ready
-    $(window).on('unload', function(){ //save when closing tab
-        saveTodo();
-    });
+    $(window).on('unload', saveTodo); //save list when closing tab
+    $(".add-task-btn").click(addTask);
+    $(".to-do-list").click(checkTaskClick);
+    $(".delete-completed-btn").click(deleteCompleted);
 });
-$(".add-task-btn").click(addTask);
-$(".to-do-list").click(checkTaskClick);
-$(".delete-completed-btn").click(deleteCompleted);
+
 //FUNCTIONS
 
 //adds a new task via used input
@@ -51,7 +50,7 @@ function createTaskElement(name, complete) {
         "</button>"));
 
     //check if completed
-    if(complete){
+    if (complete) {
         $(newTask).addClass("completed");
     }
 }

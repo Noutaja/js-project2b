@@ -8,9 +8,10 @@ A simple to-do list. A school project.
 * Complete tasks
 * Remove all completed tasks
 * Tasks saved between sessions
+* Drag and drop rearranging tasks
 
 ## To-do
-* Task saving between sessions
 * Filtering
+* Bootstrap
 
 Online version: https://stupefied-mayer-ac9f57.netlify.app/

@@ -4,7 +4,7 @@ const storedList = "storedList";
 
 //LISTENERS
 $(document).ready(function () {
-    loadTodo() //load from LocalStorage when ready
+    loadTodo(); //load from LocalStorage when ready
     $(window).on('unload', function(){ //save when closing tab
         saveTodo();
     });

@@ -4,20 +4,17 @@ const storedList = "storedList";
 
 //LISTENERS
 $(document).ready(function () {
-    loadTodo()
-    $(window).on('unload', function(){
+    loadTodo() //load from LocalStorage when ready
+    $(window).on('unload', function(){ //save when closing tab
         saveTodo();
     });
 });
-//window.onunload = saveTodo();
-
-
 $(".add-task-btn").click(addTask);
-//$(".add-task-btn").click(saveTodo);
 $(".to-do-list").click(checkTaskClick);
 $(".delete-completed-btn").click(deleteCompleted);
 //FUNCTIONS
 
+//adds a new task via used input
 function addTask(event) {
     event.preventDefault();
 
@@ -26,30 +23,40 @@ function addTask(event) {
     }
 
     createTaskElement();
-    //$(newTask).addClass("completed");
     $(".add-task-input").val("");
 }
 
+//creates a new task element
 function createTaskElement(name, complete) {
+    //main li
     const newTask = $("<li class='task'></li>");
     $(".to-do-list").append($(newTask));
+
+    //complete button
     $(newTask).append($("<button class='task-complete-btn'>" +
         "<i class='fas fa-check'></i>" +
         "</button>"));
+
+    //name, read from parameters when loading from LocalStorage
     if (name === undefined) {
         $(newTask).append($("<div class='task-text'>" + $(".add-task-input").val() +
             "</div>"))
     } else {
         $(newTask).append($("<div class='task-text'>" + name + "</div>"))
     }
+
+    //delete button
     $(newTask).append($("<button class='task-delete-btn'>" +
         "<i class='fas fa-trash'></i>" +
         "</button>"));
+
+    //check if completed
     if(complete){
         $(newTask).addClass("completed");
     }
 }
 
+//check which button on a task was clicked
 function checkTaskClick(event) {
     const item = $(event.target);
     if ($(item).hasClass("task-delete-btn")) {
@@ -60,6 +67,7 @@ function checkTaskClick(event) {
 
 }
 
+//delete all completed tasks
 function deleteCompleted() {
     $(".to-do-list").children().each(function () {
         if ($(this).hasClass("completed")) {
@@ -68,20 +76,24 @@ function deleteCompleted() {
     })
 }
 
+//delete a task
 function deleteTask(task) {
-    $(task).css("position", "relative");
+    $(task).css("position", "relative"); //relative needed for movement
     $(task).animate({
         right: '100px'
     }, { duration: 'slow', queue: false });
     $(task).fadeOut("slow", function () {
-        // Animation complete.
-        $(task).remove();
+        // animation complete
+        $(task).remove(); //actual deletion
     });
 }
 
+//check for input errors
 function inputError() {
+    //clear old errors
     $(".error-message").val("");
 
+    //check if input under 3 characters long
     if ($(".add-task-input").val().length < 3) {
         $(".error-message").text("The task must be longer than 2 letters!");
         $(".add-task-input").addClass("error");
@@ -95,6 +107,7 @@ function inputError() {
     return false;
 }
 
+//load the list from LocalStorage
 function loadTodo() {
     const list = getLocalStorageTable(storedList);
 
@@ -104,6 +117,7 @@ function loadTodo() {
     }
 }
 
+//save the list to LocalStorage
 function saveTodo() {
     let array = [];
 
@@ -112,7 +126,9 @@ function saveTodo() {
 
     if (todoList.children.length > 0) {
         for (let i = 0; i < todoList.children.length; i++) {
+            //dig down deep enough to find the task name
             const name = todoList.children[i].children[1].innerText;
+            //and the completion status
             if (todoList.children[i].classList.contains("completed")) {
                 array.push({ name: name, completed: true });
             } else {
@@ -140,6 +156,7 @@ function getLocalStorageTable(localStorageName) {
     return storedData;
 }
 
+//drag and drop functionality
 $(function () {
     $(".to-do-list").sortable();
 });
